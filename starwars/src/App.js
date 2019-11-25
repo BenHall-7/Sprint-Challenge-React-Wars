@@ -1,17 +1,56 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
+import axios from "axios";
+import Person from "./components/Person";
+import styled from "styled-components";
 
 const App = () => {
-  // Try to think through what state you'll need for this app before starting. Then build out
-  // the state properties here.
+  const [page, setPage] = useState("https://swapi.co/api/people/");
+  const [nextPage, setNextPage] = useState(null);
+  const [prevPage, setPrevPage] = useState(null);
 
-  // Fetch characters from the star wars api in an effect hook. Remember, anytime you have a 
-  // side effect in a component, you want to think about which state and/or props it should
-  // sync up with, if any.
+  const [people, setPeople] = useState([]);
+
+  useEffect(() => {
+    axios.get(page)
+      .then(response => {
+        setPeople(response.data.results);
+        setNextPage(response.data.next);
+        setPrevPage(response.data.previous);
+        console.log(response.data.results);
+      })
+      .catch(rejection => {
+        console.log(rejection);
+      });
+  }, [page]);
+
+  let Buttons = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    button {
+      width: 100px;
+      margin: 0 10px;
+    }
+  `;
 
   return (
     <div className="App">
       <h1 className="Header">React Wars</h1>
+      <Buttons>
+        <button disabled={!prevPage} onClick={() => {
+          if (prevPage != null) {
+            setPage(prevPage);
+          }
+        }}>Previous</button>
+        <button disabled={!nextPage} onClick={() => {
+          if (nextPage != null) {
+            setPage(nextPage);
+          }
+        }}>Next</button>
+      </Buttons>
+      {people.map((person, index) => <Person data={person} key={index}/>)}
     </div>
   );
 }
