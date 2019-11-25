@@ -4,25 +4,24 @@ import axios from "axios";
 import Person from "./components/Person";
 
 const App = () => {
-  // Try to think through what state you'll need for this app before starting. Then build out
-  // the state properties here.
+  const [page, setPage] = useState("https://swapi.co/api/people/");
+  const [nextPage, setNextPage] = useState(null);
+  const [prevPage, setPrevPage] = useState(null);
 
   const [people, setPeople] = useState([]);
 
-  // Fetch characters from the star wars api in an effect hook. Remember, anytime you have a 
-  // side effect in a component, you want to think about which state and/or props it should
-  // sync up with, if any.
-
   useEffect(() => {
-    axios.get("https://swapi.co/api/people/?page=1")
+    axios.get(page)
       .then(response => {
         setPeople(response.data.results);
+        setNextPage(response.data.next);
+        setPrevPage(response.data.previous);
         console.log(response.data.results);
       })
       .catch(rejection => {
         console.log(rejection);
       });
-  }, []);
+  }, [page]);
 
   return (
     <div className="App">
