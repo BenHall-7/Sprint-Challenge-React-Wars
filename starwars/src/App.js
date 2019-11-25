@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 import axios from "axios";
 import Person from "./components/Person";
+import styled from "styled-components";
 
 const App = () => {
   const [page, setPage] = useState("https://swapi.co/api/people/");
@@ -23,12 +24,33 @@ const App = () => {
       });
   }, [page]);
 
+  let Buttons = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    button {
+      width: 100px;
+      margin: 0 10px;
+    }
+  `;
+
   return (
     <div className="App">
       <h1 className="Header">React Wars</h1>
-      {
-        people.map((person, index) => <Person data={person} key={index}/>)
-      }
+      <Buttons>
+        <button onClick={() => {
+          if (prevPage != null) {
+            setPage(prevPage);
+          }
+        }}>Previous</button>
+        <button onClick={() => {
+          if (nextPage != null) {
+            setPage(nextPage);
+          }
+        }}>Next</button>
+      </Buttons>
+      {people.map((person, index) => <Person data={person} key={index}/>)}
     </div>
   );
 }
