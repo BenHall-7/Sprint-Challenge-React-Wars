@@ -39,12 +39,12 @@ const App = () => {
     <div className="App">
       <h1 className="Header">React Wars</h1>
       <Buttons>
-        <button onClick={() => {
+        <button disabled={!prevPage} onClick={() => {
           if (prevPage != null) {
             setPage(prevPage);
           }
         }}>Previous</button>
-        <button onClick={() => {
+        <button disabled={!nextPage} onClick={() => {
           if (nextPage != null) {
             setPage(nextPage);
           }
